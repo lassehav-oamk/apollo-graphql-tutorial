@@ -3,30 +3,44 @@ var bodyParser = require('body-parser');
 const { ApolloServer, gql } = require('apollo-server-express');
 var { makeExecutableSchema } = require('graphql-tools');
 
-
-
-
 const app = express();
 
 const schema = gql`
   type Query {
-    me: User
+    me: User,
+    user(id: ID!):  User,
+    users: [User!]
   }
 
   type User {
     username: String!,
-    id: Int
+    id: ID!
   }
 `;
+
+let users = {
+  1: {
+    id: '1',
+    username: 'Neil Armstrong',
+  },
+  2: {
+    id: '2',
+    username: 'Test Emil',
+  },
+};
 
 const resolvers = {
   Query: {
     me: () => {
-      return {
-        username: 'Test Emil',
-        id: 32
-      };
+      return users[1]
     },
+    user: (parent, args) => {
+      return users[args.id];
+    },
+    users: () => {
+      return Object.values(users);
+    }
+
   },
 };
 
