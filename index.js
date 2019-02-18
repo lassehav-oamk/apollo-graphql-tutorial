@@ -40,8 +40,12 @@ const resolvers = {
     users: () => {
       return Object.values(users);
     }
-
   },
+  User: {
+    username: (parent) => {
+      return parent.username + ", X"
+    }
+  }
 };
 
 const server = new ApolloServer({
